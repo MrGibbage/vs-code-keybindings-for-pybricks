@@ -1,0 +1,104 @@
+{
+  "name": "vs-code-keybindings-for-pybricks",
+  "displayName": "VS Code Keybindings for Pybricks",
+  "description": "Provides keybindings for Pybricks",
+  "icon": "robot-keyboard.png",
+  "pricing": "Free",
+  "publisher": "SkipMorrow",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MrGibbage/PybricksVsCodeKeybindings.git"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "keybindings": [
+      {
+        "key": "ctrl+l",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Run on my robot"
+      },
+      {
+        "key": "ctrl+alt+l",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Run on alt robot"
+      },
+      {
+        "key": "ctrl+shift+l",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Run master_program.py on my robot"
+      },
+      {
+        "key": "ctrl+shift+alt+l",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Run master_program.py on alt robot"
+      },
+      {
+        "key": "ctrl+l",
+        "command": "-workbench.action.chat.newChat",
+        "when": "chatIsEnabled && inChat && chatLocation != 'editing-session'"
+      },
+      {
+        "key": "ctrl+l",
+        "command": "-workbench.action.chat.newEditSession",
+        "when": "chatEditingParticipantRegistered && chatIsEnabled && inChat && chatLocation == 'editing-session'"
+      },
+      {
+        "key": "ctrl+l",
+        "command": "-expandLineSelection",
+        "when": "textInputFocus"
+      },
+      {
+        "key": "ctrl+l",
+        "command": "-notebook.centerActiveCell",
+        "when": "notebookEditorFocused"
+      },
+      {
+        "key": "ctrl+l",
+        "command": "-kb-macro.wrap",
+        "when": "kb-macro.active && textInputFocus"
+      },
+      {
+        "key": "ctrl+l",
+        "command": "-kb-macro.wrap",
+        "when": "kb-macro.active && notebookEditorFocused"
+      },
+      {
+        "key": "ctrl+l",
+        "command": "-kb-macro.wrap",
+        "when": "chatIsEnabled && inChat && kb-macro.active && chatLocation != 'editing-session'"
+      },
+      {
+        "key": "ctrl+l",
+        "command": "-kb-macro.wrap",
+        "when": "chatEditingParticipantRegistered && chatIsEnabled && inChat && kb-macro.active && chatLocation == 'editing-session'"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.99.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
