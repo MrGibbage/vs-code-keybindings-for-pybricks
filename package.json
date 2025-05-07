@@ -5,7 +5,7 @@
   "icon": "robot-keyboard.png",
   "pricing": "Free",
   "publisher": "SkipMorrow",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.99.0"
   },
