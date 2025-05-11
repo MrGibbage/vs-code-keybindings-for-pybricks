@@ -27,7 +27,34 @@ This extension contributes the following keybindings:
 * ctrl-shift-l: Run master_program.py on my robot
 * ctrl-alt-shift-l: Run master_program.py on alt robot
 
-Because most of these shortcuts were already in use, this extension disables those shortcuts. Don't install this extension if you rely on the original shortcuts.
+## Provides
+
+Review the "package.json" file to see the details, But this adds four keybindings:
+
+```json
+      {
+        "key": "ctrl+l",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Run on my robot"
+      },
+      {
+        "key": "ctrl+alt+l",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Run on alt robot"
+      },
+      {
+        "key": "ctrl+shift+l",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Run master_program.py on my robot"
+      },
+      {
+        "key": "ctrl+shift+alt+l",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Run master_program.py on alt robot"
+      }
+```
+
+Because most of these shortcuts were already in use, this extension disables those existing shortcuts. Don't install this extension if you rely on the original shortcuts.
 
 Disables:
 ```json
