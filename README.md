@@ -37,9 +37,9 @@ This extension contributes the following keybindings:
 
 We remember this by recognizing that L stands for "launch"
 If you add the "alt" key, you get the option to run on any "alternative" robot
-If you add the "shift" key, you will run the "**S**equencing" program (or you can think of it as the ma**S**ter program
+If you add the "shift" key, you will run the "**S**equencing" program (or you can think of it as the ma**S**ter program)
 
-By the way, with great power comes great responsibility. Be sure to instruct the team members to be careful to not accidentally run the program on a robot that they don't have control of.
+By the way, with great power comes great responsibility. Be sure to instruct the team members to be careful to not accidentally run the program on a robot that they don't have control of. You don't want robots driving off of desks!
 
 ## Provides
 
