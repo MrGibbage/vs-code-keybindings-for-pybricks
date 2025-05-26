@@ -10,7 +10,7 @@ For teams with more than one robot, you can also run the current program on any 
 
 ![image](https://github.com/user-attachments/assets/a20ef371-48b8-40f3-9506-2158ba2e061b)
 
-We have individual programs for each mission, and we have a master program that we use at tournaments to select the individual mission as needed. There is also a keybinding for running the master program on your robot or on any robot. In this case, it isn't necessary that the master program be open in the editor at all.
+We have individual programs for each mission, and we have a master program (sometimes called a "sequencing" program) that we use at tournaments to select the individual mission as needed. There is also a keybinding for running the master program on your robot or on any robot. In this case, it isn't necessary that the master program be open in the editor at all.
 
 ## Requirements
 
@@ -30,10 +30,16 @@ Read more about [Pybricks](https://pybricks.com)
 
 This extension contributes the following keybindings:
 
-* ctrl-l: Run on my robot
+* ctrl-l (that's a lower-case "L"): Run on my robot
 * ctrl-alt-l: Run on Alt robot
 * ctrl-shift-l: Run master_program.py on my robot
 * ctrl-alt-shift-l: Run master_program.py on alt robot
+
+We remember this by recognizing that L stands for "launch"
+If you add the "alt" key, you get the option to run on any "alternative" robot
+If you add the "shift" key, you will run the "sequencing" program
+
+By the way, with great power comes great responsibility. Instruct the team members to be careful to not accidentally run the program on a robot that they don't have control of.
 
 ## Provides
 
