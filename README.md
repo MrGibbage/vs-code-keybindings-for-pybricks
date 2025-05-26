@@ -30,8 +30,8 @@ Read more about [Pybricks](https://pybricks.com)
 
 This extension contributes the following keybindings:
 
-* ctrl-l (that's a lower-case "L"): Run on my robot
-* ctrl-alt-l: Run on Alt robot
+* ctrl-l (that's a lower-case "L"): Run on my robot, as defined in Step 6 above
+* ctrl-alt-l: Run on Alt robot, as defined in the robot list from Step 4 above
 * ctrl-shift-l: Run master_program.py on my robot
 * ctrl-alt-shift-l: Run master_program.py on alt robot
 
@@ -127,4 +127,7 @@ Here we go!
 README updates
 
 ### 0.0.3
+More README updates
+
+### 0.0.4
 More README updates
