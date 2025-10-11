@@ -14,7 +14,7 @@ We have individual programs for each mission, and we have a master program (some
 
 ## Requirements
 
-1. Set up a virtual environment for your pybrick project
+1. Set up a virtual environment for your pybricks project
 2. `pip install pybricks`
 3. `pip install pybricksdev`
 
@@ -23,7 +23,7 @@ Read more about [Pybricks](https://pybricks.com)
 4. Copy [tasks.json](https://github.com/FLL-Team-24277/FLL-Fall-2024-Submerged/blob/main/.vscode/tasks.json) from FLL Team 24277 file saved in your project's .vscode directory. Tasks in VS Code are used to run external programs. In this case we want to run the pybricksdev.exe program with the correct parameters to run the userr program as needed.
 5.a. Edit your copy of the tasks.json with any updates you have. In particular, you will need to update the list of robots about 2/3 of the way in the file. 
 5.b. Optional. By the way, note that there is also a task in that tasks.json file that we use to automatically do a git pull whenever we open the folder in VS Code. You may or may not want that feature. If you don't, simply delete it. If you do want to use it, be sure to also grap the [gitpull.py](https://github.com/FLL-Team-24277/FLL-Fall-2024-Submerged/blob/main/.vscode/gitpull.py) file which actually does all the work.
-6. Set a user environment variable named robotName and set the value to your robot name. Everything is case sensitive. Restart VS Code after updating the environment variable.
+6. Set a VS Code user setting named fllRobotName and set the value to your robot name. Everything is case sensitive. 
 7. Test it out! Write a pybricks program that you want to run on a Lego hub. With that file open and active in the editor, press ctrl-l. It should run on your hub.
 
 

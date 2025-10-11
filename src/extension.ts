@@ -1,3 +1,12 @@
+// For help on publishing extensions see the following link: https://code.visualstudio.com/api/working-with-extensions/publishing-extension
+// But here are the steps:
+// cd myExtension
+// $ vsce package
+// # myExtension.vsix generated
+// $ vsce publish
+// # <publisher id>.myExtension published to VS Code Marketplace
+// 
+//
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
@@ -9,6 +18,43 @@ export function activate(context: vscode.ExtensionContext) {
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "vs-code-keybindings-for-pybricks" is now active!');
+
+	// Create a status bar item to show the fllRobotName setting
+	const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+	statusBarItem.tooltip = 'Open User Settings (json)';
+	statusBarItem.command = 'vs-code-keybindings-for-pybricks.openFllRobotSettings';
+	context.subscriptions.push(statusBarItem);
+
+	// Command invoked when the status bar item is clicked
+	const openSettingsDisposable = vscode.commands.registerCommand('vs-code-keybindings-for-pybricks.openFllRobotSettings', () => {
+		vscode.commands.executeCommand('workbench.action.openSettingsJson');
+	});
+	context.subscriptions.push(openSettingsDisposable);
+
+	// Helper to update the status bar based on configuration
+	function updateStatus() {
+		const config = vscode.workspace.getConfiguration();
+		const name = config.get<string>('fllRobotName');
+		if (!name) {
+			statusBarItem.text = 'fllRobotName is not set';
+			statusBarItem.color = '#ff0000';
+		} else {
+			statusBarItem.text = `fllRobotName: ${name}`;
+			statusBarItem.color = '#00ff00';
+		}
+		statusBarItem.show();
+	}
+
+	// Update status initially
+	updateStatus();
+
+	// Watch for configuration changes
+	const configWatcher = vscode.workspace.onDidChangeConfiguration(e => {
+		if (e.affectsConfiguration('fllRobotName')) {
+			updateStatus();
+		}
+	});
+	context.subscriptions.push(configWatcher);
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
