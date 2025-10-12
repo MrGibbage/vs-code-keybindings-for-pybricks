@@ -20,33 +20,39 @@ Also provides a button on the status bar to show what the robot name is. Clickin
 
 ## Requirements
 
-1. Set up a virtual environment for your pybricks project
-2. `pip install pybricks`
-3. `pip install pybricksdev`
+1. Set up a virtual environment for your pybricks project (uv, venv, anaconda are all ok)
+  - `pip install pybricks`
+  - `pip install pybricksdev`
 
 Read more about [Pybricks](https://pybricks.com)
 
-4. Copy [tasks.json](https://github.com/FLL-Team-24277/FLL-Fall-2024-Submerged/blob/main/.vscode/tasks.json) from FLL Team 24277 file saved in your project's .vscode directory. Tasks in VS Code are used to run external programs. In this case we want to run the pybricksdev.exe program with the correct parameters to run the userr program as needed.
-5.a. Edit your copy of the tasks.json with any updates you have. In particular, you will need to update the list of robots about 2/3 of the way in the file. 
-5.b. Optional. By the way, note that there is also a task in that tasks.json file that we use to automatically do a git pull whenever we open the folder in VS Code. You may or may not want that feature. If you don't, simply delete it. If you do want to use it, be sure to also grap the [gitpull.py](https://github.com/FLL-Team-24277/FLL-Fall-2024-Submerged/blob/main/.vscode/gitpull.py) file which actually does all the work.
-6. Set a VS Code user setting named fllRobotName and set the value to your robot name. Everything is case sensitive. 
-7. Test it out! Write a pybricks program that you want to run on a Lego hub. With that file open and active in the editor, press ctrl-l. It should run on your hub.
+2. Copy [tasks.json](https://github.com/FLL-Team-24277/FLL-Fall-2025-Unearthed/blob/main/.vscode/tasks.json) from FLL Team 24277 file saved in your project's .vscode directory. Tasks in VS Code are used to run external programs. In this case we want to run the pybricksdev.exe program with the correct parameters to run the userr program as needed.
+
+3. Edit tasks.json
+   a. Edit your copy of the tasks.json with any updates you have. In particular, you will need to update the list of robots about 2/3 of the way in the file. 
+   b. Optional. By the way, note that there is also a task in that tasks.json file that we use to automatically do a git pull whenever we open the folder in VS Code. You may or may not want that feature. If you don't, simply delete it. If you do want to use it, be sure to also download the [gitpull.py](https://github.com/FLL-Team-24277/FLL-Fall-2025-Unearthed/blob/main/.vscode/gitpull.py) file which actually does all the work.
+
+4. Click on the fllRobotName button on the status bar to set a VS Code user setting named fllRobotName and set the value to your robot name. Everything is case sensitive. 
+
+5. Test it out! Write a pybricks program that you want to run on a Lego hub. With that file open and active in the editor, press ctrl-l. It should run on your hub.
 
 
 ## Extension Settings
 
 This extension contributes the following keybindings:
 
-* ctrl-l (that's a lower-case "L"): Run on my robot, as defined in Step 6 above
-* ctrl-alt-l: Run on Alt robot, as defined in the robot list from Step 4 above
-* ctrl-shift-l: Run master_program.py on my robot
-* ctrl-alt-shift-l: Run master_program.py on alt robot
+* ctrl-l (that's a lower-case "L"): Run the current open file on my robot, as defined in Step 4 above
+* ctrl-alt-l: Run the current open file on Alt robot, as defined in the robot list in tasks.json from Step 3 above
+* ctrl-shift-l: Run master_program.py on my robot (does not require the master_program.py file to be open)
+* ctrl-alt-shift-l: Run master_program.py on alt robot (does not require the master_program.py file to be open)
 
 We remember this by recognizing that L stands for "launch"
 If you add the "alt" key, you get the option to run on any "alternative" robot
 If you add the "shift" key, you will run the "**S**equencing" program (or you can think of it as the ma**S**ter program)
 
 By the way, with great power comes great responsibility. Be sure to instruct the team members to be careful to not accidentally run the program on a robot that they don't have control of. You don't want robots driving off of desks!
+
+If you are using a master program, it must be named master_program.py for the master program keybindings to work. Someday I will make it a configurable setting if there is interest.
 
 ## Provides
 
