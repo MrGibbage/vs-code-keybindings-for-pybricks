@@ -2,7 +2,7 @@
 
 ## Features
 
-Simply provides keybindings for pybricks using FLL Teams 24277's VS Code task configuration. This will enable a very simple way to run the current program (that is, the program that is open and currently being edited in the editor) on a specific identified robot (that is, "YOUR" robot), simply by pressing ctrl-l. In the example below, BOB is the robot that is defined as my robot using a Windows environment variable, and carter.py is the program that is currently open in the editor.
+Provides keybindings for pybricks using FLL Teams 24277's VS Code task configuration. This will enable a very simple way to run the current program (that is, the program that is open and currently being edited in the editor) on a specific identified robot (that is, "YOUR" robot), simply by pressing ctrl-l. In the example below, BOB is the robot that is defined as my robot using a Windows environment variable, and carter.py is the program that is currently open in the editor.
 
 ![image](https://github.com/user-attachments/assets/bfb95788-c71d-4248-af1c-4cb4ac4791d5)
 
@@ -11,6 +11,10 @@ For teams with more than one robot, you can also run the current program on any 
 ![image](https://github.com/user-attachments/assets/a20ef371-48b8-40f3-9506-2158ba2e061b)
 
 We have individual programs for each mission, and we have a master program (sometimes called a "sequencing" program) that we use at tournaments to select the individual mission as needed. There is also a keybinding for running the master program on your robot or on any robot. In this case, it isn't necessary that the master program be open in the editor at all.
+
+Also provides a button on the status bar to show what the robot name is. Clicking on the button opens the user settings.json file so the robot name can be edited.
+
+
 
 ## Requirements
 

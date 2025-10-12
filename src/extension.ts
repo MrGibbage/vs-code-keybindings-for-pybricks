@@ -27,7 +27,28 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Command invoked when the status bar item is clicked
 	const openSettingsDisposable = vscode.commands.registerCommand('vs-code-keybindings-for-pybricks.openFllRobotSettings', () => {
-		vscode.commands.executeCommand('workbench.action.openSettingsJson');
+		// Open the user settings JSON file
+		vscode.commands.executeCommand('workbench.action.openSettingsJson').then(() => {
+			// Try to add a sample entry to the user settings
+			const editor = vscode.window.activeTextEditor;
+			if (editor && editor.document.fileName.endsWith('settings.json')) {
+				const sampleEntry = `"fllRobotName": "SampleRobotName"`;
+				const text = editor.document.getText();
+				if (!text.includes('"fllRobotName"')) {
+					// Find the position after the first opening brace
+					const firstBrace = text.indexOf('{');
+					if (firstBrace !== -1) {
+						const edit = new vscode.WorkspaceEdit();
+						const position = editor.document.positionAt(firstBrace + 1);
+						// If the file has other entries, add a comma after the new entry
+						const afterBraceText = text.substring(firstBrace + 1).trim();
+						const entryText = '\n' + sampleEntry + (afterBraceText.length > 0 && afterBraceText !== '}' ? ',\n' : '\n');
+						edit.insert(editor.document.uri, position, entryText);
+						vscode.workspace.applyEdit(edit);
+					}
+				}
+			}
+		});
 	});
 	context.subscriptions.push(openSettingsDisposable);
 
