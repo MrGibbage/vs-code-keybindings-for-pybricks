@@ -14,7 +14,9 @@ We have individual programs for each mission, and we have a master program (some
 
 Also provides a button on the status bar to show what the robot name is. Clicking on the button opens the user settings.json file so the robot name can be edited.
 
+<img width="268" height="111" alt="image" src="https://github.com/user-attachments/assets/2201d323-b5bb-4a15-a34c-1febdc10ca72" />
 
+<img width="259" height="65" alt="image" src="https://github.com/user-attachments/assets/42804f6f-d926-4944-af41-833957fac693" />
 
 ## Requirements
 
