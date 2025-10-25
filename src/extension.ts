@@ -171,6 +171,21 @@ export function activate(context: vscode.ExtensionContext) {
                     }
                 });
             }
+
+            // Save and close the keybindings editor so it isn't left open.
+            try {
+                // Save the document (ensures changes are persisted)
+                await editor.document.save();
+
+                // If the editor is still visible, focus it and close that editor tab only
+                const matchingEditor = vscode.window.visibleTextEditors.find(e => e.document.uri.toString() === editor.document.uri.toString());
+                if (matchingEditor) {
+                    await vscode.window.showTextDocument(matchingEditor.document, matchingEditor.viewColumn, false);
+                    await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+                }
+            } catch {
+                // Ignore save/close errors to avoid interrupting activation.
+            }
         }
     }
 

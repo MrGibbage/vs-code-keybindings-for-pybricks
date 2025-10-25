@@ -175,3 +175,6 @@ Added taskbar notification and setting for fllRobotName
 
 ### 1.2.0
 Added feature to delete existing keybindings needed for this extension
+
+### 1.2.1
+Make sure the keybindings.json file is closed
