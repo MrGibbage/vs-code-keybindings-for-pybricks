@@ -178,3 +178,6 @@ Added feature to delete existing keybindings needed for this extension
 
 ### 1.2.1
 Make sure the keybindings.json file is closed
+
+### 1.2.2
+Switched to direct file I/O instead of opening the file

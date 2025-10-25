@@ -77,7 +77,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Remove sample keybindings from the user's keybindings.json (only the samples)
     async function removeSampleKeybindings() {
-        // Exact-match sample keybindings to remove (must exactly match fields to be removed)
         const exactSamples = [
             { "key": "ctrl+alt+l 1", "command": "workbench.action.tasks.runTask", "args": "Run on robot1" },
             { "key": "ctrl+alt+l 2", "command": "workbench.action.tasks.runTask", "args": "Run on robot2" },
@@ -90,11 +89,9 @@ export function activate(context: vscode.ExtensionContext) {
             { "key": "ctrl+alt+l 9", "command": "workbench.action.tasks.runTask", "args": "Run on robot9" },
             { "key": "ctrl+alt+l 0", "command": "workbench.action.tasks.runTask", "args": "Run on robot0" },
             { "key": "ctrl+alt+l -", "command": "workbench.action.tasks.runTask", "args": "Run on robot-" },
-            { "key": "ctrl+alt+l =", "command": "workbench.action.tasks.runTask", "args": "Run on robot=" },
-            // Note: ctrl+shift+l was intentionally moved out of exactSamples and is handled by partialKeys below.
+            { "key": "ctrl+alt+l =", "command": "workbench.action.tasks.runTask", "args": "Run on robot=" }
         ];
 
-        // Partial-match keys: remove any entry that uses one of these keys, regardless of command/args.
         const partialKeys = new Set([
             "ctrl+l",
             "ctrl+shift+l",
@@ -102,24 +99,66 @@ export function activate(context: vscode.ExtensionContext) {
             "ctrl+shift+alt+l"
         ]);
 
-        // Open the user's global keybindings.json in the editor
-        await vscode.commands.executeCommand('workbench.action.openGlobalKeybindingsFile');
+        // Determine candidate user data folders for VS Code (Windows, Insiders, OSS variants)
+        const os = require('os');
+        const path = require('path');
+        const fs = vscode.workspace.fs;
+        const appName = vscode.env.appName || '';
+        const candidates = ['Code', 'Code - Insiders', 'Code - OSS', 'VSCodium', 'Code - Exploration'];
 
-        const editor = vscode.window.activeTextEditor;
-        if (!editor || !editor.document.fileName.endsWith('keybindings.json')) {
+        // Try APPDATA for Windows first, fall back to known locations for other platforms
+        const possibleUris: vscode.Uri[] = [];
+        const home = os.homedir();
+        if (process.platform === 'win32') {
+            const appData = process.env['APPDATA'] || path.join(home, 'AppData', 'Roaming');
+            for (const c of candidates) {
+                possibleUris.push(vscode.Uri.file(path.join(appData, c, 'User', 'keybindings.json')));
+            }
+        } else if (process.platform === 'darwin') {
+            for (const c of candidates) {
+                possibleUris.push(vscode.Uri.file(path.join(home, 'Library', 'Application Support', c, 'User', 'keybindings.json')));
+            }
+        } else {
+            // linux
+            for (const c of candidates) {
+                possibleUris.push(vscode.Uri.file(path.join(home, '.config', c, 'User', 'keybindings.json')));
+            }
+        }
+
+        // Find first existing keybindings.json
+        let keybindingsUri: vscode.Uri | undefined;
+        for (const uri of possibleUris) {
+            try {
+                await fs.stat(uri);
+                keybindingsUri = uri;
+                break;
+            } catch {
+                // not found, continue
+            }
+        }
+
+        if (!keybindingsUri) {
+            // File not found; nothing to do.
             return;
         }
-        const text = editor.document.getText();
 
-        // Try to parse the file as JSON. If parsing fails (comments, trailing commas, etc.), bail out.
+        // Read file contents directly (no editor opened)
+        let raw: Uint8Array;
+        try {
+            raw = await fs.readFile(keybindingsUri);
+        } catch {
+            return;
+        }
+
+        const text = Buffer.from(raw).toString('utf8');
+
+        // Parse strict JSON; if it fails, do not modify the file
         let parsed: any;
         try {
             parsed = JSON.parse(text || '[]');
         } catch {
-            // Could not parse keybindings.json safely; do not modify user's file.
             return;
         }
-
         if (!Array.isArray(parsed)) {
             return;
         }
@@ -132,60 +171,56 @@ export function activate(context: vscode.ExtensionContext) {
             return keyMatch && commandMatch && argsMatch;
         }
 
-        // Filter out any entries that match an exact sample OR whose key is in partialKeys
         const filtered = parsed.filter((entry: any) => {
-            // If entry key matches one of the partial keys, remove it
             if (typeof entry.key === 'string' && partialKeys.has(entry.key)) {
-                return false; // drop this entry
+                return false;
             }
-            // Otherwise, remove only if it exactly matches one of the exactSamples
             if (exactSamples.some(sample => entryMatchesExact(sample, entry))) {
-                return false; // drop this entry
+                return false;
             }
-            return true; // keep otherwise
+            return true;
         });
 
-        // If nothing to remove, return without editing
         if (filtered.length === parsed.length) {
+            // No changes needed. Ensure the file isn't left open: if it is open, close it.
+            const openEditor = vscode.window.visibleTextEditors.find(e => e.document.uri.toString() === keybindingsUri!.toString());
+            if (openEditor) {
+                try {
+                    await vscode.window.showTextDocument(openEditor.document, openEditor.viewColumn);
+                    await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+                } catch {
+                    // ignore
+                }
+            }
             return;
         }
 
-        // Replace entire document with cleaned content (pretty-printed)
-        const fullRange = new vscode.Range(
-            editor.document.positionAt(0),
-            editor.document.positionAt(text.length)
-        );
+        // Write updated content back to disk
+        try {
+            const encoded = Buffer.from(JSON.stringify(filtered, null, 4), 'utf8');
+            await fs.writeFile(keybindingsUri, encoded);
 
-        const editSuccess = await editor.edit(editBuilder => {
-            editBuilder.replace(fullRange, JSON.stringify(filtered, null, 4));
-        });
-
-        if (editSuccess) {
             const removedCount = parsed.length - filtered.length;
-            if (removedCount > 0) {
-                const message = `${removedCount} sample keybinding${removedCount === 1 ? '' : 's'} removed`;
-                // Non-intrusive notification with an action to view the keybindings file
-                vscode.window.showInformationMessage(message, 'View keybindings').then(selection => {
-                    if (selection === 'View keybindings') {
-                        vscode.commands.executeCommand('workbench.action.openGlobalKeybindingsFile');
-                    }
-                });
-            }
-
-            // Save and close the keybindings editor so it isn't left open.
-            try {
-                // Save the document (ensures changes are persisted)
-                await editor.document.save();
-
-                // If the editor is still visible, focus it and close that editor tab only
-                const matchingEditor = vscode.window.visibleTextEditors.find(e => e.document.uri.toString() === editor.document.uri.toString());
-                if (matchingEditor) {
-                    await vscode.window.showTextDocument(matchingEditor.document, matchingEditor.viewColumn, false);
-                    await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+            const message = `${removedCount} sample keybinding${removedCount === 1 ? '' : 's'} removed`;
+            vscode.window.showInformationMessage(message, 'View keybindings').then(selection => {
+                if (selection === 'View keybindings') {
+                    vscode.commands.executeCommand('workbench.action.openGlobalKeybindingsFile');
                 }
-            } catch {
-                // Ignore save/close errors to avoid interrupting activation.
+            });
+
+            // If the file was open in the editor, close that tab so it isn't left open
+            const openEditor = vscode.window.visibleTextEditors.find(e => e.document.uri.toString() === keybindingsUri.toString());
+            if (openEditor) {
+                try {
+                    await vscode.window.showTextDocument(openEditor.document, openEditor.viewColumn);
+                    await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+                } catch {
+                    // ignore
+                }
             }
+        } catch {
+            // Writing failed — do nothing to avoid corrupting user data.
+            return;
         }
     }
 
