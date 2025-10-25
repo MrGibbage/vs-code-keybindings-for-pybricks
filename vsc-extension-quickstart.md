@@ -12,9 +12,40 @@
 ## Get up and running straight away
 
 * Press `F5` to open a new window with your extension loaded.
-* Run your command from the command palette by pressing (`Ctrl+Shift+P` or `Cmd+Shift+P` on Mac) and typing `Hello World`.
+* Run your command from the command palette by pressing (`Ctrl+Shift+P`) and typing `Hello World`.
 * Set breakpoints in your code inside `src/extension.ts` to debug your extension.
 * Find output from your extension in the debug console.
+
+### Testing keybindings removal (safe local test, Windows)
+
+1. Build the extension code (recommended)
+   - In the workspace terminal run:
+     - npm run compile
+
+2. Launch Extension Development Host
+   - Press F5 (Run → Start Debugging). A new VS Code window (Extension Development Host) will open. This host has its own user profile — your normal VS Code settings/keybindings are not used here.
+
+3. Prepare the host's keybindings.json
+   - In the Extension Development Host press `Ctrl+Shift+P` and run: Preferences: Open Keyboard Shortcuts (JSON) (command id: workbench.action.openGlobalKeybindingsFile).
+   - Replace the file contents with a valid JSON array containing the sample entries you expect the extension to remove. IMPORTANT: the extension uses JSON.parse on this file, so the file must be strict JSON (no comments, no trailing commas).
+
+4. Trigger the removal
+   - Reload the Extension Development Host so the extension re-activates and runs removeSampleKeybindings():
+     - `Ctrl+Shift+P` → Developer: Reload Window
+   - After reload, re-open the Keyboard Shortcuts (JSON) file to confirm the sample entries were removed.
+
+5. Test status bar and the `fllRobotName` setting
+   - In the Extension Development Host open user settings JSON:
+     - `Ctrl+Shift+P` → Preferences: Open User Settings (JSON) (command id: workbench.action.openSettingsJson)
+   - Add or remove the `"fllRobotName": "YourRobotName"` entry and save. The status bar should update automatically (green when set, red when missing).
+
+6. Optional quick test without reload
+   - If you prefer not to reload, temporarily expose a command that calls the removal function, register it in package.json, run the host, invoke the command from the host's command palette, then remove the helper command before publishing.
+
+Notes
+* The Extension Development Host uses a separate profile; all testing must be done inside that host.
+* Because the removal currently uses JSON.parse, files that include comments or trailing commas (JSONC) will not be changed — this is deliberate to avoid corrupting users' files.
+* No publishing or reinstall is required to test — F5 plus edits inside the host is sufficient.
 
 ## Make changes
 

@@ -127,6 +127,28 @@ Disables:
 }
 ```
 
+## Note about removing existing keybindings
+
+To avoid surprising users, the extension only removes keybindings that match the samples we shipped. Important details:
+
+- The extension will always remove any keybinding that uses one of these keys, regardless of its command or args:
+  - ctrl+l
+  - ctrl+shift+l
+  - ctrl+alt+l
+  - ctrl+shift+alt+l
+
+- In addition, the extension removes a set of "exact match" sample entries (key + command + args). Only entries that exactly match those samples are removed.
+
+- Removal runs once when the extension activates. That means users who upgrade will have matching sample entries removed when VS Code reloads the extension (no uninstall/reinstall required).
+
+- Safety and limitations:
+  - The current implementation uses JSON.parse on keybindings.json. If the user's keybindings.json contains comments or trailing commas (JSONC), the file will not be modified to avoid corruption.
+  - When entries are removed you will see a non-intrusive informational message indicating how many sample keybindings were removed, with an action button to open the keybindings file.
+  - If you are concerned, back up your keybindings.json before updating the extension.
+
+- Testing tip:
+  - Use the Extension Development Host (press F5) and edit the host's Preferences: Open Keyboard Shortcuts (JSON) file to add test entries (must be strict JSON). Reload the host to trigger the removal and verify the behavior.
+
 ## Known Issues
 
 None
@@ -147,3 +169,9 @@ More README updates
 
 ### 1.0.0
 Release 1.0.0
+
+### 1.1.0
+Added taskbar notification and setting for fllRobotName
+
+### 1.2.0
+Added feature to delete existing keybindings needed for this extension
